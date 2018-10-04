@@ -89,7 +89,6 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
 
         view=null;
         view=inflater.inflate(R.layout.content_main,container,false);
-        swipeRefreshLayout = view.findViewById(R.id.SwipeRefresh);
         recyclerView = view.findViewById(R.id.recycler_view);
         if(isPermissionGranted()){
             Toast.makeText(getActivity(),"Location Permission Granted",Toast.LENGTH_SHORT).show();
