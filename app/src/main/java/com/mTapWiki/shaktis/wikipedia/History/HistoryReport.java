@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,7 +42,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +62,7 @@ public class HistoryReport extends Fragment implements ArticleAdapter.FilteredAr
         view=null;
         view=inflater.inflate(R.layout.content_main,container,false);
         recyclerView = view.findViewById(R.id.recycler_view);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("History");
         setRecycler();
         return view;
     }
@@ -82,7 +86,7 @@ public class HistoryReport extends Fragment implements ArticleAdapter.FilteredAr
 
     @Override
     public void onArticleSelected(Article article) {
-        callFullUrl(String.valueOf(article.getPageID()));
+        callFullUrl(String.valueOf(article.getPageID()),article.getTitle());
     }
 
     public void prepareWikiData() {
@@ -113,7 +117,7 @@ public class HistoryReport extends Fragment implements ArticleAdapter.FilteredAr
         });
 
     }
-    public void callFullUrl(final String pageid){
+    public void callFullUrl(final String pageid,final String title){
         String url = "https://en.wikipedia.org/w/api.php?" +
                 "action=query" +
                 "&prop=info" +
@@ -130,6 +134,7 @@ public class HistoryReport extends Fragment implements ArticleAdapter.FilteredAr
                             if(furl!=null){
                                 Intent i = new Intent(getActivity(),WikiDetail.class);
                                 i.putExtra("url",furl);
+                                i.putExtra("title",title);
                                 startActivity(i);
                             }
                         } catch (JSONException e) {

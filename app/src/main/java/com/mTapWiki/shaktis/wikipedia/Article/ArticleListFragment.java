@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -87,11 +88,12 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
         view=null;
         view=inflater.inflate(R.layout.content_main,container,false);
         swipeRefreshLayout = view.findViewById(R.id.SwipeRefresh);
-
         recyclerView = view.findViewById(R.id.recycler_view);
         if(isPermissionGranted()){
             Toast.makeText(getActivity(),"Location Permission Granted",Toast.LENGTH_SHORT).show();
         }
+        checkLocationRequest();
+        setRecycler();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         return view;
     }
@@ -172,6 +174,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
                                 pageID = readObj.getInt("pageid");
                                 index = readObj.getInt("index");
                                 title = readObj.getString("title");
+
                                 if(readObj.has("thumbnail")){
                                     imgSrc = readObj.getJSONObject("thumbnail").getString("source");
                                     article.setImgSrc(imgSrc);
@@ -278,10 +281,10 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
         );
         mDatabase.child("user1").child(SharedPrefManager.getInstance(getActivity()).getUser().getUsername()).child(String.valueOf(article.getPageID())).setValue(history);
 
-        callFullUrl(String.valueOf(article.pageID));
+        callFullUrl(String.valueOf(article.pageID),article.title);
         MyApplication.getInstance().trackEvent(SharedPrefManager.getInstance(getActivity()).getUser().getUsername(),"Read",String.valueOf(article.pageID)+" = "+article.title);
     }
-    public void callFullUrl(final String pageid){
+    public void callFullUrl(final String pageid,final String title){
         String url = "https://en.wikipedia.org/w/api.php?" +
                 "action=query" +
                 "&prop=info" +
@@ -298,6 +301,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
                             if(furl!=null){
                                 Intent i = new Intent(getActivity(),WikiDetail.class);
                                 i.putExtra("url",furl);
+                                i.putExtra("title",title);
                                 startActivity(i);
                             }
                         } catch (JSONException e) {
@@ -440,12 +444,11 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
             }
             return true;
         } else {
-
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_LOCATION_REQUEST_CODE);
-            return false;
-        }
 
+        }
+        return false;
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -453,11 +456,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
             if (permissions.length == 1 &&
                     permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-
                 try {
-
-                    Toast.makeText(getContext(), "allowed to access location", Toast.LENGTH_LONG).show();
                 } catch (SecurityException e) {
                     Toast.makeText(getActivity(), "Not a valid request" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }

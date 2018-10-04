@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity
         drawer = findViewById(R.id.drawer_layout);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Wikipedia");
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -109,6 +110,10 @@ public class MainActivity extends AppCompatActivity
             System.exit(0);
         }
         else {
+            fragment = getSupportFragmentManager();
+            ft= fragment.beginTransaction();
+            ft.replace(R.id.container,new ArticleListFragment());
+            ft.commit();
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_LONG).show();
         }

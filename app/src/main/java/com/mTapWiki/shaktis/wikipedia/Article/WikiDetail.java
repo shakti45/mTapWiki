@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -26,7 +27,10 @@ public class WikiDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wiki_detail);
+//        getActionBar().setTitle("Wikipedia");
+        getSupportActionBar().setTitle("Wikipedia");
         Intent intent = getIntent();
+        getSupportActionBar().setTitle(intent.getStringExtra("title"));
         browser = new WebView(this);
         browser.getSettings().setJavaScriptEnabled(true); // enable javascript
         browser.getSettings().setCacheMode( WebSettings.LOAD_CACHE_ELSE_NETWORK);

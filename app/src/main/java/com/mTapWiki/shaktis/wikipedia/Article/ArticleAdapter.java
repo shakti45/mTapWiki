@@ -17,10 +17,6 @@ import com.mTapWiki.shaktis.wikipedia.R;
 
 import java.util.List;
 
-/**
- * Created by shaktis on 28/11/17.
- */
-
 public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHolder>  {
     private List<Article> ArticleList;
     private List<Article> FilteredArticleList;
@@ -35,9 +31,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHo
         NetworkImageView thumbNail;
         public MyViewHolder(View view){
             super(view);
-            textvwTitle = (TextView) view.findViewById(R.id.txtvwTitle);
-            txtvwExtract = (TextView) view.findViewById(R.id.txtvwExtract);
-            thumbNail = (NetworkImageView) view.findViewById(R.id.thumbnail);
+            textvwTitle = view.findViewById(R.id.txtvwTitle);
+            txtvwExtract = view.findViewById(R.id.txtvwExtract);
+            thumbNail = view.findViewById(R.id.thumbnail);
             imageLoader = VolleyController.getInstance().getImageLoader();
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -46,26 +42,18 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.MyViewHo
                     listener.onArticleSelected(FilteredArticleList.get(getAdapterPosition()));
                 }
             });
-
-
         }
     }
-
     public ArticleAdapter(List<Article> ArticleList,FilteredArticleListListener listener){
         this.ArticleList=ArticleList;
         this.FilteredArticleList=ArticleList;
         this.listener=listener;
-
-
-
-
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent,int viewType){
         View itemView=LayoutInflater.from(parent.getContext()).inflate(R.layout.article_list_row,parent,false);
 
         return new MyViewHolder(itemView);
-
     }
     @Override
     public void onBindViewHolder(MyViewHolder holder,int position){
