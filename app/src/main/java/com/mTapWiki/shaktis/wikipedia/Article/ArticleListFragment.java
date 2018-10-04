@@ -79,11 +79,13 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
 
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Toast.makeText(getActivity(),"View Created",Toast.LENGTH_LONG).show();
 
         view=null;
         view=inflater.inflate(R.layout.content_main,container,false);
@@ -92,7 +94,6 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
         if(isPermissionGranted()){
             Toast.makeText(getActivity(),"Location Permission Granted",Toast.LENGTH_SHORT).show();
         }
-        checkLocationRequest();
         setRecycler();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         return view;
@@ -153,7 +154,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
         recyclerView.addItemDecoration(new MyDividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL,16));
         recyclerView.setAdapter(mAdapter);
 
-
+        Config.setUrl("def",null);
         prepareWikiData(Config.getUrl());
     }
     public void prepareWikiData(String url){
@@ -438,12 +439,12 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
                 mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
                 getLoc();
                 Config.setUrl("default",Config.getLatLng());
-                setRecycler();
             } catch (SecurityException e) {
                 Toast.makeText(getActivity(), "Not a valid request" + e.getMessage(), Toast.LENGTH_LONG);
             }
             return true;
         } else {
+            checkLocationRequest();
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_LOCATION_REQUEST_CODE);
 
