@@ -14,6 +14,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import com.mTapWiki.shaktis.wikipedia.History.History;
 import com.mTapWiki.shaktis.wikipedia.config.Config;
 import com.mTapWiki.shaktis.wikipedia.GoogleAnalytics.MyApplication;
 import com.mTapWiki.shaktis.wikipedia.Helper.Volley.VolleyController;
@@ -49,7 +54,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -57,6 +64,7 @@ import java.util.Map;
 import android.support.v4.app.Fragment;
 
 public class ArticleListFragment extends Fragment implements ArticleAdapter.FilteredArticleListListener {
+    private SwipeRefreshLayout swipeRefreshLayout;
     private SearchView searchView;
     private List<Article> articleList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -66,28 +74,34 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
 
     View view;
 
+    private DatabaseReference mDatabase;
+
    static Double lat,lng;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         view=null;
         view=inflater.inflate(R.layout.content_main,container,false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        swipeRefreshLayout = view.findViewById(R.id.SwipeRefresh);
+
+        recyclerView = view.findViewById(R.id.recycler_view);
         if(isPermissionGranted()){
             Toast.makeText(getActivity(),"Location Permission Granted",Toast.LENGTH_SHORT).show();
         }
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         return view;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@Nullable View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -112,7 +126,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Config.setUrl("query",query);
+                Config.setUrl("query",query.trim());
                 prepareWikiData( Config.getUrl());
                 if(query.length()==0){
                     Config.setUrl("default",Config.getLatLng());
@@ -122,7 +136,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
             }
             @Override
             public boolean onQueryTextChange(String query) {
-                Config.setUrl("query",query);
+                Config.setUrl("query",query.trim());
                 prepareWikiData( Config.getUrl());
                 if(query.length()==0){
                     Config.setUrl("default",Config.getLatLng());
@@ -158,16 +172,16 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
                                 String title,imgSrc,extract;
                                 Article  article =new Article();
                                 String key = (String) keyItr.next();
-                                JSONObject readObj = (JSONObject) res.getJSONObject(key);
-                                pageID = (int) readObj.getInt("pageid");
-                                index = (int) readObj.getInt("index");
-                                title = (String) readObj.getString("title");
+                                JSONObject readObj = res.getJSONObject(key);
+                                pageID = readObj.getInt("pageid");
+                                index = readObj.getInt("index");
+                                title = readObj.getString("title");
                                 if(readObj.has("thumbnail")){
-                                    imgSrc = (String) readObj.getJSONObject("thumbnail").getString("source");
+                                    imgSrc = readObj.getJSONObject("thumbnail").getString("source");
                                     article.setImgSrc(imgSrc);
                                 }
                                 if(readObj.has("extract")){
-                                    extract = (String) readObj.getString("extract");
+                                    extract = readObj.getString("extract");
                                     article.setExtract(extract);
                                 }
                                 else{
@@ -187,7 +201,7 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
                                 mAdapter.notifyDataSetChanged();
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+//                            e.printStackTrace();
                             Toast.makeText(getActivity(),
                                     "Error: " + e.getMessage(),
                                     Toast.LENGTH_LONG).show();
@@ -261,6 +275,14 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
 
     @Override
     public void onArticleSelected(Article article) {
+        History history = new History(
+                String.valueOf(article.getPageID()),
+                article.getTitle(),
+                article.getImgSrc(),
+                new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime())
+        );
+        mDatabase.child("user1").child(SharedPrefManager.getInstance(getActivity()).getUser().getUsername()).child(String.valueOf(article.getPageID())).setValue(history);
+
         callFullUrl(String.valueOf(article.pageID));
         MyApplication.getInstance().trackEvent(SharedPrefManager.getInstance(getActivity()).getUser().getUsername(),"Read",String.valueOf(article.pageID)+" = "+article.title);
     }
@@ -436,22 +458,22 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
             if (permissions.length == 1 &&
                     permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getActivity(), "allowed to access location", Toast.LENGTH_LONG);
+
 
                 try {
 
-
+                    Toast.makeText(getContext(), "allowed to access location", Toast.LENGTH_LONG).show();
                 } catch (SecurityException e) {
-                    Toast.makeText(getActivity(), "Not a valid request" + e.getMessage(), Toast.LENGTH_LONG);
+                    Toast.makeText(getActivity(), "Not a valid request" + e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
             else {
                 isPermissionGranted();
-                Toast.makeText(getActivity(), "Not a allowed to acess location", Toast.LENGTH_LONG);
+                Toast.makeText(getActivity(), "Not a allowed to acess location", Toast.LENGTH_LONG).show();
                 try {
 
                 } catch (SecurityException e) {
-                    Toast.makeText(getActivity(), "Not a allowed to access location", Toast.LENGTH_LONG);
+                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
         }

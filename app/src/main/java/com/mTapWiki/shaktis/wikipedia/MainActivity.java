@@ -3,9 +3,11 @@ package com.mTapWiki.shaktis.wikipedia;
 
 import android.content.Context;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +30,7 @@ import com.mTapWiki.shaktis.wikipedia.Article.ArticleListFragment;
 import com.mTapWiki.shaktis.wikipedia.ContactUs.ContactUsFragment;
 import com.mTapWiki.shaktis.wikipedia.GoogleAnalytics.MyApplication;
 
+import com.mTapWiki.shaktis.wikipedia.History.HistoryReport;
 import com.mTapWiki.shaktis.wikipedia.Login.SharedPreference.SharedPrefManager;
 import com.mTapWiki.shaktis.wikipedia.Login.SharedPreference.User;
 import com.mTapWiki.shaktis.wikipedia.config.Config;
@@ -66,22 +69,22 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         User user = SharedPrefManager.getInstance(this).getUser();
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = findViewById(R.id.drawer_layout);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        TextView mTextViewUsername=(TextView) navigationView.getHeaderView(0).findViewById(R.id.name);
+        TextView mTextViewUsername= navigationView.getHeaderView(0).findViewById(R.id.name);
         mTextViewUsername.setText(user.getUsername());
         navigationView.setItemIconTintList(null);
-        TextView mtextViewAccountType=(TextView) navigationView.getHeaderView(0).findViewById(R.id.type);
-        mtextViewAccountType.setText("Read = "+String.valueOf(user.getRead()));
+        TextView mtextViewAccountType= navigationView.getHeaderView(0).findViewById(R.id.type);
+        mtextViewAccountType.setText("Read");
         fragment = getSupportFragmentManager();
         ft= fragment.beginTransaction();
         ft.replace(R.id.container,new ArticleListFragment());
@@ -104,7 +107,7 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@Nullable MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
@@ -114,43 +117,50 @@ public class MainActivity extends AppCompatActivity
             ft= fragment.beginTransaction();
             ft.replace(R.id.container,new ArticleListFragment());
             ft.commit();
-        } else if (id == R.id.nav_logout) {
+        }
+        else if (id == R.id.nav_history) {
+            fragment = getSupportFragmentManager();
+            ft= fragment.beginTransaction();
+            ft.replace(R.id.container,new HistoryReport());
+            ft.commit();
+        }
+        else if (id == R.id.nav_logout) {
             Toast.makeText(getApplicationContext(),"Logged out",Toast.LENGTH_LONG).show();
             finish();
             SharedPrefManager.getInstance(getApplicationContext()).logout();
-        } else if (id == R.id.nav_contact) {
+        }
+        else if (id == R.id.nav_contact) {
             ft= fragment.beginTransaction();
             ft.replace(R.id.container,new ContactUsFragment());
             ft.commit();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         MyApplication.getInstance().trackEvent("MainActivity","Back Press","mLabelBackPress");
         // close search view on back button pressed
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         }
         if (doubleBackToExitPressedOnce) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce=false;
-                }
-            }, 2000);
-
-            super.onBackPressed();
-            return;
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
+            startActivity(intent);
+            finish();
+            System.exit(0);
+//            super.onBackPressed();
+//            return;
         }
         else {
-            ft=fragment.beginTransaction();
-            ft.replace(R.id.container,new ArticleListFragment());
-            ft.commit();
+//            ft=fragment.beginTransaction();
+//            ft.replace(R.id.container,new ArticleListFragment());
+//            ft.commit();
             this.doubleBackToExitPressedOnce = true;
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_LONG).show();
         }

@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "314221544341",
+    "firebase_url": "https://mtapwiki.firebaseio.com",
+    "project_id": "mtapwiki",
+    "storage_bucket": "mtapwiki.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:314221544341:android:f230ae27c871df6b",
+        "android_client_info": {
+          "package_name": "com.mTapWiki.shaktis.wikipedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "314221544341-leud5d9o10q73gsorltpds4lg2tiv16g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQKuBhP2jxCnFXDD0KLQMgvji1o8ETJKc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

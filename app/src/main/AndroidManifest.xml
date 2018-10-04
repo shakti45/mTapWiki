@@ -25,7 +25,7 @@
 
     <application
         android:name=".GoogleAnalytics.MyApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@drawable/ic_book_black_24dp"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -34,9 +34,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Article.WikiDetail"
             android:label="@string/title_activity_wiki_detail" />
@@ -49,6 +47,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB6E-bUyO_nAqdXEmnLiB82sC8O0-CA_so" />

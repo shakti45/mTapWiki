@@ -41,14 +41,14 @@ public class ContactUsFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view=null;
         view=inflater.inflate(R.layout.fragment_contactus,container,false);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Contact Us");
 
-        mButtonSendEmail=(AppCompatImageButton) view.findViewById(R.id.mSendEmailToSupport);
-        mButtonCallSupport=(AppCompatImageButton) view.findViewById(R.id.mButtonCallSupport);
+        mButtonSendEmail= view.findViewById(R.id.mSendEmailToSupport);
+        mButtonCallSupport= view.findViewById(R.id.mButtonCallSupport);
 
         return view;
     }
@@ -67,7 +67,10 @@ public class ContactUsFragment extends Fragment {
         mButtonCallSupport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                call_action("7905367810");
+               if(isPermissionGranted()){
+                   call_action("7905367810");
+               }
+
             }
         });
 
@@ -78,9 +81,8 @@ public class ContactUsFragment extends Fragment {
         super.onResume();
     }
     public void call_action(String number){
-        String phnum = number;
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:" + phnum));
+        callIntent.setData(Uri.parse("tel:" + number));
         try {
             startActivity(callIntent);
         }catch (SecurityException e){
