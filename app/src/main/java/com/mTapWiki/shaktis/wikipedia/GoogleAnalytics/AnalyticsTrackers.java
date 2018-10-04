@@ -1,8 +1,5 @@
 package com.mTapWiki.shaktis.wikipedia.GoogleAnalytics;
 
-/**
- * Created by shaktis on 10/02/18.
- */
 
 import android.content.Context;
 
@@ -19,7 +16,6 @@ public final class AnalyticsTrackers {
 
     public enum Target {
         APP,
-        // Add more trackers here if you need, and update the code in #get(Target) below
     }
 
     private static AnalyticsTrackers sInstance;

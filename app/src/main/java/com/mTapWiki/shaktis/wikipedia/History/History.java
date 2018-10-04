@@ -5,9 +5,8 @@ public class History {
    private String title;
    private String imgSrc;
    private String time;
-   public  History(){
 
-    }
+   public  History(){}
   public History(String pageID, String title,String imgsrc,String time){
         this.pageID=pageID;
         this.title=title;

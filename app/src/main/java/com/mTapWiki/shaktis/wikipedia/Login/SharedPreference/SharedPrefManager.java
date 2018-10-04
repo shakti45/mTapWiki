@@ -6,9 +6,6 @@ import android.content.SharedPreferences;
 
 import com.mTapWiki.shaktis.wikipedia.Login.UserLogin;
 
-/**
- * Created by shaktis on 08/01/18.
- */
 
 public class SharedPrefManager {
 
@@ -33,25 +30,20 @@ public class SharedPrefManager {
         return mInstance;
     }
 
-    //method to let the user login
-    //this method will store the user data in shared preferences
     public void userLogin(User user) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-       // editor.putInt(KEY_ID, user.getId());
         editor.putString(KEY_USERNAME, user.getUsername());
         editor.putBoolean(KEY_READ, user.getRead());
         editor.putBoolean(KEY_WRITE,user.getWrite());
         editor.apply();
     }
 
-    //this method will checker whether user is already logged in or not
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(KEY_USERNAME, null) != null;
     }
 
-    //this method will give the logged in user
     public User getUser() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return new User(
@@ -61,7 +53,6 @@ public class SharedPrefManager {
         );
     }
 
-    //this method will logout the user
     public void logout() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

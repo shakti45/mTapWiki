@@ -71,12 +71,8 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
     private ArticleAdapter mAdapter;
     private FusedLocationProviderClient mFusedLocationClient;
     private static final int MY_LOCATION_REQUEST_CODE =1 ;
-
     View view;
-
     private DatabaseReference mDatabase;
-
-   static Double lat,lng;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -201,7 +197,6 @@ public class ArticleListFragment extends Fragment implements ArticleAdapter.Filt
                                 mAdapter.notifyDataSetChanged();
                             }
                         } catch (JSONException e) {
-//                            e.printStackTrace();
                             Toast.makeText(getActivity(),
                                     "Error: " + e.getMessage(),
                                     Toast.LENGTH_LONG).show();

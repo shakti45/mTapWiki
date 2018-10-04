@@ -4,18 +4,15 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
 
 
 import com.android.volley.AuthFailureError;
@@ -27,7 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.firebase.database.ChildEventListener;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,20 +32,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mTapWiki.shaktis.wikipedia.Article.Article;
 import com.mTapWiki.shaktis.wikipedia.Article.ArticleAdapter;
-import com.mTapWiki.shaktis.wikipedia.Article.ArticleListFragment;
 import com.mTapWiki.shaktis.wikipedia.Article.WikiDetail;
 import com.mTapWiki.shaktis.wikipedia.Helper.Volley.MyDividerItemDecoration;
 import com.mTapWiki.shaktis.wikipedia.Helper.Volley.VolleyController;
 import com.mTapWiki.shaktis.wikipedia.Login.SharedPreference.SharedPrefManager;
 import com.mTapWiki.shaktis.wikipedia.R;
-import com.mTapWiki.shaktis.wikipedia.config.Config;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

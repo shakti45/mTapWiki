@@ -1,8 +1,5 @@
 package com.mTapWiki.shaktis.wikipedia.Helper.Volley;
 
-/**
- * Created by shaktis on 26/12/17.
- */
 
 import android.text.TextUtils;
 
@@ -13,37 +10,28 @@ import com.android.volley.toolbox.Volley;
 
 
 public class VolleyController extends BaseApplication {
-
     public static final String TAG = VolleyController.class.getSimpleName();
-
     private RequestQueue mRequestQueue;
-
     private static VolleyController mInstance;
     private ImageLoader mImageLoader;
-
     @Override
     public void onCreate() {
         super.onCreate();
         mInstance = this;
     }
-
     public static synchronized VolleyController getInstance() {
         return mInstance;
     }
-
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         }
-
         return mRequestQueue;
     }
-
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         getRequestQueue().add(req);
     }
-
     public <T> void addToRequestQueue(Request<T> req) {
         req.setTag(TAG);
         getRequestQueue().add(req);
@@ -56,7 +44,6 @@ public class VolleyController extends BaseApplication {
         }
         return this.mImageLoader;
     }
-
     public void cancelPendingRequests(Object tag) {
         if (mRequestQueue != null) {
             mRequestQueue.cancelAll(tag);

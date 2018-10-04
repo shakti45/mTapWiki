@@ -11,9 +11,6 @@ import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
 
 
-/**
- * Created by Ravi on 13/08/15.
- */
 public class MyApplication extends VolleyController {
     public static final String TAG = MyApplication.class
             .getSimpleName();
