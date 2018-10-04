@@ -6,8 +6,8 @@ public class History {
    private String imgSrc;
    private String time;
 
-   public  History(){}
-  public History(String pageID, String title,String imgsrc,String time){
+    public  History(){}
+    public History(String pageID, String title,String imgsrc,String time){
         this.pageID=pageID;
         this.title=title;
         this.imgSrc = imgsrc;
@@ -22,7 +22,6 @@ public class History {
     public String getTime() {
         return time;
     }
-
     public String getImgSrc() {
         return imgSrc;
     }
