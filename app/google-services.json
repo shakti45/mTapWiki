@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "55079972089",
+    "firebase_url": "https://wikipedia-e0f8a.firebaseio.com",
+    "project_id": "wikipedia-e0f8a",
+    "storage_bucket": "wikipedia-e0f8a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55079972089:android:a1c26252c5ee8025",
+        "android_client_info": {
+          "package_name": "com.example.shaktis.wikipedia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55079972089-jnej9bkgh0crdi2hr4jmo7u5el7dq5sj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shaktis.wikipedia",
+            "certificate_hash": "58c847a01d944ce0eed08d78acfbbb103a7ce741"
+          }
+        },
+        {
+          "client_id": "55079972089-3iik72v8lr8p4tp41p212kbtskh8pqc9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDukFlaVCOukj1PE_5CgXaWKTwWMUnCpSo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55079972089-3iik72v8lr8p4tp41p212kbtskh8pqc9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
